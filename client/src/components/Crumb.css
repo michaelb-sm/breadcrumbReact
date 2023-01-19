@@ -1,0 +1,8 @@
+.crumb {
+  display: flex;
+  align-items: center;
+}
+
+.crumbButton {
+  font-size: 2em;
+}

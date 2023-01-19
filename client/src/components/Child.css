@@ -1,0 +1,12 @@
+.child {
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.childButton {
+  font-size: 3em;
+}
