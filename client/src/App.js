@@ -12,22 +12,20 @@ function App() {
 
   // Fetch data from server
   useEffect(() => {
+
     fetch(serverURL + path.join("/"))
       .then(response => response.json())
       .then(data => setPathObj(data));
+
   }, [path]);
 
   // Handle Path Changes
-  function handleCrumbClick(pathIndex) {
-    setPath( prev => {
-      return prev.slice(0, pathIndex+1);
-    });
+  function handleCrumbClick(subPath) {
+    setPath(subPath);
   }
 
-  function handleChildClick(childName) {
-    setPath( prev => {
-      return prev.concat(['"' + childName + '"'])
-    });
+  function handleChildClick(parentPath, childName) {
+    setPath(parentPath.concat(['"' + childName + '"']));
   }
 
   // Display App
@@ -39,7 +37,7 @@ function App() {
         {path.map((value, index) => {
           return (<Crumb 
                     key={index}
-                    pathIndex={index}
+                    pathTo={path.slice(0, index+1)}
                     name={value}
                     onClicked={handleCrumbClick}
                   />
@@ -53,6 +51,7 @@ function App() {
           pathObj.children.map((value, index) => {
             return (<Child 
                       key={index}
+                      pathToParent={path}
                       name={value}
                       onClicked={handleChildClick}
                     />
