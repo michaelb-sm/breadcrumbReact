@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import debounce from 'lodash.debounce'
 import './App.css'
 import Crumb from './components/Crumb'
 import Child from './components/Child'
@@ -10,22 +11,27 @@ function App() {
   const [path, setPath] = useState(['root']);
   const [pathObj, setPathObj] = useState({});
 
-  // Fetch data from server
+  // Fetch initial data from server
   useEffect(() => {
-
-    fetch(serverURL + path.join("/"))
+    fetch("http://localhost:8000/path/root")
       .then(response => response.json())
-      .then(data => setPathObj(data));
-
-  }, [path]);
+      .then(data => setPathObj(data));;
+  }, []);
 
   // Handle Path Changes
+  const pathChangeDebounced = useRef(debounce((newPath) => {
+    setPath(newPath);
+    fetch(serverURL + newPath.join("/"))
+      .then(response => response.json())
+      .then(data => setPathObj(data));
+  }, 50));
+
   function handleCrumbClick(subPath) {
-    setPath(subPath);
+    pathChangeDebounced.current(subPath);
   }
 
   function handleChildClick(parentPath, childName) {
-    setPath(parentPath.concat(['"' + childName + '"']));
+    pathChangeDebounced.current(parentPath.concat(['"' + childName + '"']));
   }
 
   // Display App

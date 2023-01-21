@@ -16,7 +16,7 @@ function traversePath(pathList) {
     curObj = dirRoot;
     for (var i=2; i<pathList.length; i++) {
 
-      if (curObj.children[pathList[i]]) {
+      if (curObj.children && curObj.children[pathList[i]]) {
         curObj = curObj.children[pathList[i]];
 
       } else { // Pause traversal if path not valid
